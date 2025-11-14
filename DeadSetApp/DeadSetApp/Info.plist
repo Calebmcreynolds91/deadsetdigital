@@ -55,11 +55,11 @@
 	</array>
 	<!-- Privacy Policy Descriptions - Required for App Store Compliance -->
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires camera access to provide its core functionality.</string>
+	<string>DeadSet needs camera access to scan your receipts and budget documents.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires photo library access to provide its core functionality.</string>
+	<string>DeadSet needs access to your photos to import receipts and budget images.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app requires permission to save photos to your library.</string>
+	<string>DeadSet can save receipt photos to your library for your records.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires microphone access to provide its core functionality.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

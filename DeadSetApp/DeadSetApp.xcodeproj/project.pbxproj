@@ -11,6 +11,15 @@
 		A10003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10004 /* ContentView.swift */; };
 		A10005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10006 /* Assets.xcassets */; };
 		A10007 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10008 /* Preview Assets.xcassets */; };
+		A10026 /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10027 /* Receipt.swift */; };
+		A10028 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10029 /* Budget.swift */; };
+		A10030 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10031 /* OCRService.swift */; };
+		A10032 /* BudgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10033 /* BudgetViewModel.swift */; };
+		A10034 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10035 /* CameraView.swift */; };
+		A10036 /* ReceiptsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10037 /* ReceiptsListView.swift */; };
+		A10038 /* BudgetsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10039 /* BudgetsListView.swift */; };
+		A10040 /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10041 /* ReceiptDetailView.swift */; };
+		A10042 /* AddBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10043 /* AddBudgetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +29,15 @@
 		A10006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10008 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A10010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10027 /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
+		A10029 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		A10031 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		A10033 /* BudgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewModel.swift; sourceTree = "<group>"; };
+		A10035 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A10037 /* ReceiptsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptsListView.swift; sourceTree = "<group>"; };
+		A10039 /* BudgetsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsListView.swift; sourceTree = "<group>"; };
+		A10041 /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
+		A10043 /* AddBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBudgetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +64,10 @@
 			children = (
 				A10002 /* DeadSetAppApp.swift */,
 				A10004 /* ContentView.swift */,
+				A10044 /* Models */,
+				A10045 /* Services */,
+				A10046 /* ViewModels */,
+				A10047 /* Views */,
 				A10006 /* Assets.xcassets */,
 				A10010 /* Info.plist */,
 				A10015 /* Preview Content */,
@@ -67,6 +89,43 @@
 				A10008 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A10044 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10027 /* Receipt.swift */,
+				A10029 /* Budget.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A10045 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10031 /* OCRService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A10046 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A10033 /* BudgetViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A10047 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10035 /* CameraView.swift */,
+				A10037 /* ReceiptsListView.swift */,
+				A10039 /* BudgetsListView.swift */,
+				A10041 /* ReceiptDetailView.swift */,
+				A10043 /* AddBudgetView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +200,15 @@
 			files = (
 				A10003 /* ContentView.swift in Sources */,
 				A10001 /* DeadSetAppApp.swift in Sources */,
+				A10026 /* Receipt.swift in Sources */,
+				A10028 /* Budget.swift in Sources */,
+				A10030 /* OCRService.swift in Sources */,
+				A10032 /* BudgetViewModel.swift in Sources */,
+				A10034 /* CameraView.swift in Sources */,
+				A10036 /* ReceiptsListView.swift in Sources */,
+				A10038 /* BudgetsListView.swift in Sources */,
+				A10040 /* ReceiptDetailView.swift in Sources */,
+				A10042 /* AddBudgetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
