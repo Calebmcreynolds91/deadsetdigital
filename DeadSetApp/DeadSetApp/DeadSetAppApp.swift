@@ -31,9 +31,17 @@ struct DeadSetAppApp: App {
     // Integrate AppDelegate with SwiftUI lifecycle
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    // Authentication manager
+    @StateObject private var authManager = AuthenticationManager()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authManager.isAuthenticated {
+                ContentView()
+                    .environmentObject(authManager)
+            } else {
+                AuthenticationView(authManager: authManager)
+            }
         }
     }
 }

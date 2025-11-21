@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = BudgetViewModel()
+    @EnvironmentObject var authManager: AuthenticationManager
     @State private var showCamera = false
     @State private var showPhotoPicker = false
     @State private var showAddBudget = false
@@ -42,6 +43,13 @@ struct ContentView: View {
                 Label("Budgets", systemImage: "dollarsign.circle.fill")
             }
             .tag(2)
+
+            // Settings Tab
+            SettingsView(authManager: authManager)
+            .tabItem {
+                Label("Settings", systemImage: "gear")
+            }
+            .tag(3)
         }
         .accentColor(Color("AccentColor"))
         .sheet(isPresented: $showCamera) {
