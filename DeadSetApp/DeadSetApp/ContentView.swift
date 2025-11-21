@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var showPhotoPicker = false
     @State private var showAddBudget = false
     @State private var selectedTab = 0
+    @State private var hasLoadedDemoData = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -68,6 +69,13 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showAddBudget) {
             AddBudgetView(viewModel: viewModel)
+        }
+        .onAppear {
+            // Load demo data once when demo mode is active
+            if authManager.isDemoMode && !hasLoadedDemoData {
+                viewModel.loadDemoData()
+                hasLoadedDemoData = true
+            }
         }
     }
 }

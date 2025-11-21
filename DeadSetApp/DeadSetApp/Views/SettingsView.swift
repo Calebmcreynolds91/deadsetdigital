@@ -17,21 +17,31 @@ struct SettingsView: View {
                 // Account section
                 Section {
                     if authManager.isDemoMode {
-                        HStack {
-                            Image(systemName: "play.circle.fill")
-                                .foregroundColor(.accentColor)
-                            VStack(alignment: .leading) {
-                                Text("Demo Mode")
-                                    .font(.headline)
-                                Text("Exploring without an account")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "play.circle.fill")
+                                    .foregroundColor(.accentColor)
+                                    .font(.title2)
+                                VStack(alignment: .leading) {
+                                    Text("Demo Mode Active")
+                                        .font(.headline)
+                                    Text("Exploring with sample data")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
                             }
+
+                            Text("You're using pre-populated demo content. Create an account to save your own data.")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                                .padding(.top, 4)
                         }
+                        .padding(.vertical, 4)
                     } else {
                         HStack {
                             Image(systemName: "person.circle.fill")
                                 .foregroundColor(.accentColor)
+                                .font(.title2)
                             Text("Account")
                                 .font(.headline)
                         }
