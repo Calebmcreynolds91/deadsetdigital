@@ -11,11 +11,50 @@ A modern iOS application built with Swift and SwiftUI, ready for Xcode and App S
 
 ## Getting Started
 
-### Opening the Project
+### CLI Launcher
+
+DeadSet includes a command-line launcher for common development tasks. You can use it directly or install it system-wide.
+
+#### Using the CLI Launcher
+
+```bash
+# From the project directory
+./deadset <command>
+
+# See all available commands
+./deadset help
+```
+
+#### Installation (Optional)
+
+To use the launcher from anywhere, add it to your PATH:
+
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+export PATH="/path/to/deadsetdigital:$PATH"
+
+# Or create a symlink
+ln -s /path/to/deadsetdigital/deadset /usr/local/bin/deadset
+```
+
+#### Available Commands
+
+- `deadset open` - Open the project in Xcode
+- `deadset build` - Build the project
+- `deadset test` - Run tests
+- `deadset run` - Build and run on simulator
+- `deadset clean` - Clean build artifacts
+- `deadset devices` - List available simulators
+- `deadset archive` - Create an archive for distribution
+- `deadset lint` - Run SwiftLint (if installed)
+- `deadset version` - Show current version
+- `deadset help` - Show help message
+
+### Opening the Project Manually
 
 1. Clone this repository
 2. Navigate to the project directory
-3. Open `DeadSetApp/DeadSetApp.xcodeproj` in Xcode
+3. Open `DeadSetApp/DeadSetApp.xcodeproj` in Xcode (or run `./deadset open`)
 4. Select your development team in the project settings
 5. Build and run (⌘+R)
 

@@ -1,0 +1,218 @@
+#!/bin/bash
+
+# DeadSet CLI Launcher
+# A command-line tool for managing the DeadSet iOS app
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$SCRIPT_DIR/DeadSetApp"
+PROJECT_FILE="$PROJECT_DIR/DeadSetApp.xcodeproj"
+SCHEME_NAME="DeadSetApp"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Helper functions
+print_error() {
+    echo -e "${RED}Error: $1${NC}" >&2
+}
+
+print_success() {
+    echo -e "${GREEN}$1${NC}"
+}
+
+print_info() {
+    echo -e "${BLUE}$1${NC}"
+}
+
+print_warning() {
+    echo -e "${YELLOW}$1${NC}"
+}
+
+check_xcode() {
+    if ! command -v xcodebuild &> /dev/null; then
+        print_error "Xcode command line tools not found. Please install Xcode."
+        exit 1
+    fi
+}
+
+# Command functions
+cmd_help() {
+    cat << EOF
+DeadSet CLI Launcher
+
+Usage: deadset <command> [options]
+
+Commands:
+    open                Open the project in Xcode
+    build               Build the project
+    test                Run tests
+    clean               Clean build artifacts
+    run                 Build and run on simulator
+    devices             List available simulators
+    archive             Create an archive for distribution
+    lint                Run SwiftLint (if available)
+    version             Show current version
+    help                Show this help message
+
+Examples:
+    deadset open        # Opens project in Xcode
+    deadset build       # Builds the project
+    deadset run         # Runs on default simulator
+    deadset test        # Runs all tests
+
+EOF
+}
+
+cmd_open() {
+    print_info "Opening project in Xcode..."
+    open "$PROJECT_FILE"
+    print_success "Project opened!"
+}
+
+cmd_build() {
+    check_xcode
+    print_info "Building $SCHEME_NAME..."
+    xcodebuild -project "$PROJECT_FILE" \
+               -scheme "$SCHEME_NAME" \
+               -configuration Debug \
+               -sdk iphonesimulator \
+               build
+    print_success "Build completed!"
+}
+
+cmd_test() {
+    check_xcode
+    print_info "Running tests for $SCHEME_NAME..."
+    xcodebuild -project "$PROJECT_FILE" \
+               -scheme "$SCHEME_NAME" \
+               -sdk iphonesimulator \
+               -destination 'platform=iOS Simulator,name=iPhone 15' \
+               test
+    print_success "Tests completed!"
+}
+
+cmd_clean() {
+    check_xcode
+    print_info "Cleaning build artifacts..."
+    xcodebuild -project "$PROJECT_FILE" \
+               -scheme "$SCHEME_NAME" \
+               clean
+    print_success "Clean completed!"
+}
+
+cmd_run() {
+    check_xcode
+    print_info "Building and running on simulator..."
+    xcodebuild -project "$PROJECT_FILE" \
+               -scheme "$SCHEME_NAME" \
+               -configuration Debug \
+               -sdk iphonesimulator \
+               -destination 'platform=iOS Simulator,name=iPhone 15' \
+               build
+
+    # Try to launch the simulator
+    print_info "Launching simulator..."
+    xcrun simctl boot "iPhone 15" 2>/dev/null || true
+    open -a Simulator
+
+    # Install and launch the app
+    DERIVED_DATA=$(xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME_NAME" -showBuildSettings | grep -m 1 "BUILT_PRODUCTS_DIR" | awk '{print $3}')
+    APP_PATH="$DERIVED_DATA/$SCHEME_NAME.app"
+
+    if [ -d "$APP_PATH" ]; then
+        print_info "Installing app on simulator..."
+        xcrun simctl install booted "$APP_PATH"
+        BUNDLE_ID=$(defaults read "$APP_PATH/Info.plist" CFBundleIdentifier)
+        xcrun simctl launch booted "$BUNDLE_ID"
+        print_success "App launched on simulator!"
+    else
+        print_warning "App bundle not found. Build may have failed."
+    fi
+}
+
+cmd_devices() {
+    check_xcode
+    print_info "Available iOS Simulators:"
+    xcrun simctl list devices iOS available
+}
+
+cmd_archive() {
+    check_xcode
+    print_info "Creating archive..."
+    ARCHIVE_PATH="$SCRIPT_DIR/build/DeadSetApp.xcarchive"
+    xcodebuild -project "$PROJECT_FILE" \
+               -scheme "$SCHEME_NAME" \
+               -configuration Release \
+               -archivePath "$ARCHIVE_PATH" \
+               archive
+    print_success "Archive created at: $ARCHIVE_PATH"
+}
+
+cmd_lint() {
+    if command -v swiftlint &> /dev/null; then
+        print_info "Running SwiftLint..."
+        cd "$PROJECT_DIR"
+        swiftlint
+        print_success "Linting completed!"
+    else
+        print_warning "SwiftLint not installed. Install with: brew install swiftlint"
+    fi
+}
+
+cmd_version() {
+    if [ -f "$PROJECT_DIR/DeadSetApp/Info.plist" ]; then
+        VERSION=$(defaults read "$PROJECT_DIR/DeadSetApp/Info.plist" CFBundleShortVersionString 2>/dev/null || echo "Unknown")
+        BUILD=$(defaults read "$PROJECT_DIR/DeadSetApp/Info.plist" CFBundleVersion 2>/dev/null || echo "Unknown")
+        print_info "DeadSet App"
+        echo "Version: $VERSION"
+        echo "Build: $BUILD"
+    else
+        print_warning "Info.plist not found"
+    fi
+}
+
+# Main command dispatcher
+case "${1:-help}" in
+    open)
+        cmd_open
+        ;;
+    build)
+        cmd_build
+        ;;
+    test)
+        cmd_test
+        ;;
+    clean)
+        cmd_clean
+        ;;
+    run)
+        cmd_run
+        ;;
+    devices)
+        cmd_devices
+        ;;
+    archive)
+        cmd_archive
+        ;;
+    lint)
+        cmd_lint
+        ;;
+    version)
+        cmd_version
+        ;;
+    help|--help|-h)
+        cmd_help
+        ;;
+    *)
+        print_error "Unknown command: $1"
+        echo ""
+        cmd_help
+        exit 1
+        ;;
+esac
