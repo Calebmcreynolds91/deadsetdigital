@@ -1,0 +1,1072 @@
+#!/usr/bin/env python3
+"""
+Social Media Content Calendar Generator for Fall River Lake Rentals
+Generates a full year (2026) of social media content and uploads to Airtable
+"""
+
+import os
+import json
+from datetime import datetime, timedelta
+from typing import List, Dict
+import requests
+
+# Airtable Configuration
+AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY', '')
+AIRTABLE_BASE_ID = os.getenv('AIRTABLE_BASE_ID', '')
+AIRTABLE_TABLE_NAME = 'Social Media Content Calendar 2026'
+
+def create_content_calendar() -> List[Dict]:
+    """Generate comprehensive 2026 social media content calendar"""
+
+    calendar = []
+
+    # JANUARY 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-01-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "Happy New Year from Fall River Lake! 🎉 Start 2026 with us - cozy cabins, stunning lake views, and endless winter adventures await. Book your winter escape today!",
+            "Hashtags": "#FallRiverLake #NewYear2026 #KansasGetaway #CabinLife #WinterRetreat",
+            "Media Suggestion": "Cabin with snow, warm lights glowing",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Book your winter getaway - link in bio"
+        },
+        {
+            "Date": "2026-01-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Winter fishing at Fall River Lake 🎣❄️ Ice or no ice, the fish are biting! Channel catfish, crappie, and bass waiting for you.",
+            "Hashtags": "#WinterFishing #FallRiverLake #KansasFishing #FishingLife #IceFishing",
+            "Media Suggestion": "Quick clips of winter fishing action",
+            "Category": "Fishing",
+            "Call to Action": "Tag your fishing buddy!"
+        },
+        {
+            "Date": "2026-01-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "Did you know? Fall River State Park features 6 hiking trails perfect for winter exploration! 🥾 Bundle up and discover the beauty of Kansas prairie and forested floodplains.",
+            "Hashtags": "#FallRiverStatePark #KansasHiking #WinterHiking #NatureLovers",
+            "Media Suggestion": "Winter trail scenes, wildlife",
+            "Category": "Activities",
+            "Call to Action": "Which trail will you explore first?"
+        },
+        {
+            "Date": "2026-01-15",
+            "Platform": "Instagram",
+            "Content Type": "Story Series",
+            "Caption": "Cabin Tour: See why our hunting cabins are perfect for your next Kansas adventure! Swipe through →",
+            "Hashtags": "#CabinTour #FallRiverRentals #HuntingCabin",
+            "Media Suggestion": "Series of cabin interior/exterior shots",
+            "Category": "Promotional",
+            "Call to Action": "DM us to check availability"
+        },
+        {
+            "Date": "2026-01-20",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "MARK YOUR CALENDARS 📅 Spring Turkey season opens April 16! Start planning your hunt now. Our cabins fill up fast during turkey season!",
+            "Hashtags": "#TurkeySeason #KansasHunting #SpringTurkey #HuntingCabin #FallRiverHunting",
+            "Media Suggestion": "Turkey in field, hunting gear prep",
+            "Category": "Hunting",
+            "Call to Action": "Book your turkey hunt cabin today"
+        },
+        {
+            "Date": "2026-01-25",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Extended Archery Whitetail season runs through Jan 31! ���� Last chance for 2025-26 season. Stay warm in our heated cabins after your hunt.",
+            "Hashtags": "#ArcheryHunting #WhitetailHunting #KansasDeer #BowHunting",
+            "Media Suggestion": "Archer at dawn, cabin lights",
+            "Category": "Hunting",
+            "Call to Action": "Weekend spots still available!"
+        },
+        {
+            "Date": "2026-01-28",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "Fall turkey season is wrapping up this week (runs through Jan 31). Already planning your next hunt? Spring season opens in just 77 days! 🦃",
+            "Hashtags": "#FallTurkey #KansasWildlife #HuntKansas",
+            "Media Suggestion": "Turkey silhouette at sunset",
+            "Category": "Hunting",
+            "Call to Action": "Reserve your spring dates now"
+        }
+    ])
+
+    # FEBRUARY 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-02-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "February is for waterfowl lovers! 🦆 Goose season continues through Feb 15. Wake up to lake views and prime hunting grounds.",
+            "Hashtags": "#WaterfowlHunting #GooseHunting #KansasWaterfowl #DuckHunting #FallRiverLake",
+            "Media Suggestion": "Geese flying formation over lake",
+            "Category": "Hunting",
+            "Call to Action": "Last minute openings - call to book!"
+        },
+        {
+            "Date": "2026-02-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Cozy cabin vibes ☕🔥 This is how we do winter at Fall River Lake. Who needs a vacation?",
+            "Hashtags": "#CabinVibes #CozyRetreat #WinterGetaway #KansasCabins #LakeLife",
+            "Media Suggestion": "Fire crackling, coffee, lake view through window",
+            "Category": "Promotional",
+            "Call to Action": "Double tap if you need this!"
+        },
+        {
+            "Date": "2026-02-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "Eagles at Fall River! ���� Winter is the best time to spot bald eagles fishing on the lake. Bring your binoculars and camera!",
+            "Hashtags": "#BaldEagles #Birdwatching #FallRiverWildlife #KansasNature #WildlifePhotography",
+            "Media Suggestion": "Eagle photos from Fall River",
+            "Category": "Wildlife",
+            "Call to Action": "Share your eagle photos with us!"
+        },
+        {
+            "Date": "2026-02-14",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "💕 Love is in the air... and on the lake! Surprise your valentine with a romantic cabin getaway. Fireplace, lake views, and total privacy.",
+            "Hashtags": "#ValentinesDay #RomanticGetaway #CabinRomance #KansasTravel #CouplesRetreat",
+            "Media Suggestion": "Romantic cabin setup, couple by fire",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Last-minute Valentine's spots available!"
+        },
+        {
+            "Date": "2026-02-18",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎣 Crappie fishing tip: February is excellent for crappie at Fall River! Target brush piles and standing timber in 8-12 feet of water.",
+            "Hashtags": "#CrappieFishing #FishingTips #FallRiverFishing #KansasFishing",
+            "Media Suggestion": "Crappie catch, fishing spot",
+            "Category": "Fishing",
+            "Call to Action": "What's your best crappie spot?"
+        },
+        {
+            "Date": "2026-02-23",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "February: The perfect time for a quiet escape. No crowds, peaceful mornings, incredible wildlife. Experience Fall River Lake in winter. ❄️🏞️",
+            "Hashtags": "#WinterEscape #OffSeason #QuietRetreat #FallRiverLake #PeacefulGetaway",
+            "Media Suggestion": "Serene winter lake scene, morning mist",
+            "Category": "Promotional",
+            "Call to Action": "Weekday specials available - DM for rates"
+        },
+        {
+            "Date": "2026-02-27",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "Spring is just around the corner! 🌸 Start planning your spring break getaway. Fishing, hiking, and turkey hunting season await!",
+            "Hashtags": "#SpringBreak #SpringPlanning #KansasSpring #FallRiverLake",
+            "Media Suggestion": "Early spring scenery, budding trees",
+            "Category": "Seasonal",
+            "Call to Action": "Book March & April dates now"
+        }
+    ])
+
+    # MARCH 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-03-02",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "March means pre-spawn bass fishing! 🐟 As water temps rise, largemouth bass move shallow. Time to dust off those crankbaits!",
+            "Hashtags": "#BassFishing #SpringFishing #LargemouthBass #FallRiverFishing #KansasBass",
+            "Media Suggestion": "Bass catch, fishing lures",
+            "Category": "Fishing",
+            "Call to Action": "Who's ready for bass season?"
+        },
+        {
+            "Date": "2026-03-07",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "From sunrise to sunset at Fall River Lake 🌅🌄 Every moment is magic here. Come see for yourself!",
+            "Hashtags": "#SunriseToSunset #LakeLife #FallRiverLake #KansasBeauty #NatureLovers",
+            "Media Suggestion": "Timelapse or quick cuts of lake throughout day",
+            "Category": "Scenic/Promotional",
+            "Call to Action": "Save this for your next trip!"
+        },
+        {
+            "Date": "2026-03-12",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦅 Bird watchers, take note! Spring migration is starting. Fall River State Park is home to remarkable bird diversity. Don't forget your binoculars!",
+            "Hashtags": "#Birdwatching #SpringMigration #FallRiverStatePark #BirdsOfKansas #Ornithology",
+            "Media Suggestion": "Various bird species, birder in field",
+            "Category": "Wildlife",
+            "Call to Action": "What species have you spotted?"
+        },
+        {
+            "Date": "2026-03-17",
+            "Platform": "Instagram, Facebook",
+            "Content Type": "Post",
+            "Caption": "☘️ Lucky you! St. Patrick's Day weekend special: Book 2 nights, get $50 off. Perfect for a spring fishing trip or peaceful retreat.",
+            "Hashtags": "#StPatricksDay #WeekendGetaway #FallRiverDeals #KansasCabins",
+            "Media Suggestion": "Cabin with green decorations, lake view",
+            "Category": "Promotional/Seasonal",
+            "Call to Action": "Use code LUCKY2026 when booking"
+        },
+        {
+            "Date": "2026-03-21",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🌸 First day of SPRING! The prairie is waking up, wildflowers starting to bloom, and the lake is calling. Time to emerge from hibernation!",
+            "Hashtags": "#FirstDayOfSpring #SpringEquinox #KansasPrairie #SpringAwakening #FallRiverLake",
+            "Media Suggestion": "Spring wildflowers, green prairie",
+            "Category": "Seasonal",
+            "Call to Action": "Welcome spring with us - book now!"
+        },
+        {
+            "Date": "2026-03-25",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Calling all outdoor photographers! 📸 Fall River offers incredible opportunities: wildlife, landscapes, sunrises, and star-filled skies. Stay in comfort, shoot at golden hour.",
+            "Hashtags": "#OutdoorPhotography #NaturePhotography #KansasPhotography #PhotographyRetreat #FallRiver",
+            "Media Suggestion": "Photographer in action, stunning photos",
+            "Category": "Activities",
+            "Call to Action": "Tag us in your Fall River photos!"
+        },
+        {
+            "Date": "2026-03-30",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "⏰ REMINDER: Spring Turkey season opens April 16! Only 17 days away. Our prime hunting cabins are almost fully booked. Grab the last spots!",
+            "Hashtags": "#SpringTurkey #TurkeyHunting #KansasHunting #HuntingCabin #LastChance",
+            "Media Suggestion": "Turkey gobbler, hunting cabin",
+            "Category": "Hunting",
+            "Call to Action": "Call NOW: [your phone number]"
+        }
+    ])
+
+    # APRIL 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-04-01",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Spring has SPRUNG at Fall River! 🌼🌿 Check out this transformation. Mother Nature is showing off!",
+            "Hashtags": "#SpringVibes #KansasSpring #NatureAwakening #FallRiverLake #SpringScenery",
+            "Media Suggestion": "Before/after winter to spring, blooming prairie",
+            "Category": "Seasonal",
+            "Call to Action": "Visit during peak spring beauty!"
+        },
+        {
+            "Date": "2026-04-06",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🚣‍♀️ Canoeing season is here! Paddle Fall River above the lake - calm waters, beautiful scenery, abundant wildlife. Perfect spring activity!",
+            "Hashtags": "#Canoeing #Kayaking #FallRiver #SpringPaddling #KansasOutdoors",
+            "Media Suggestion": "Canoe on river, paddlers enjoying spring",
+            "Category": "Activities",
+            "Call to Action": "Rent our cabins, bring your canoe!"
+        },
+        {
+            "Date": "2026-04-10",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "The Casner Creek trails are calling! 🥾 Six scenic hiking trails ranging from easy to moderate. Spring wildflowers are blooming NOW!",
+            "Hashtags": "#HikingTrails #CasnerCreek #FallRiverStatePark #KansasHiking #TrailLife",
+            "Media Suggestion": "Trail scenes, wildflowers, hikers",
+            "Category": "Activities",
+            "Call to Action": "Which trail will you conquer?"
+        },
+        {
+            "Date": "2026-04-16",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🦃 IT'S OPENING DAY! Spring Turkey Season is OFFICIALLY OPEN! Good luck to all our hunters staying with us. Share your success stories!",
+            "Hashtags": "#OpeningDay #SpringTurkey #KansasTurkey #HuntingLife #GoodLuck",
+            "Media Suggestion": "Sunrise hunt scene, turkey decoys",
+            "Category": "Hunting",
+            "Call to Action": "Tag us in your harvest photos!"
+        },
+        {
+            "Date": "2026-04-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🐟 White bass are running! Spring means white bass action on Fall River Lake. They're hitting everything - great fun for kids and beginners too!",
+            "Hashtags": "#WhiteBass #SpringFishing #FallRiverFishing #FamilyFishing #KansasFishing",
+            "Media Suggestion": "White bass catch, family fishing",
+            "Category": "Fishing",
+            "Call to Action": "Get your fishing gear ready!"
+        },
+        {
+            "Date": "2026-04-24",
+            "Platform": "Instagram",
+            "Content Type": "Story Series",
+            "Caption": "GUEST SPOTLIGHT: Meet the Johnson family! They've been coming to Fall River for 10 years. Swipe to see why they keep coming back →",
+            "Hashtags": "#GuestSpotlight #FallRiverFamily #LoyalGuests",
+            "Media Suggestion": "Guest testimonial, family photos",
+            "Category": "Testimonial",
+            "Call to Action": "Want to be featured? Tag us!"
+        },
+        {
+            "Date": "2026-04-28",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "Don't miss the Otter Creek fishing spot! Located above the lake, it's excellent for channel catfish and is perfect for a quiet afternoon. 🎣",
+            "Hashtags": "#OtterCreek #CatfishFishing #FallRiver #FishingSpots #LocalTips",
+            "Media Suggestion": "Otter Creek scenery, catfish",
+            "Category": "Fishing",
+            "Call to Action": "Save this spot for your next trip!"
+        }
+    ])
+
+    # MAY 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-05-01",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Welcome MAY! ☀️ Prime time for everything: turkey hunting, bass fishing, hiking, boating. What's your May adventure?",
+            "Hashtags": "#MayAdventures #SpringAtItsFinest #FallRiverLake #OutdoorLife #KansasOutdoors",
+            "Media Suggestion": "Collage of May activities",
+            "Category": "Seasonal",
+            "Call to Action": "May dates filling up - book soon!"
+        },
+        {
+            "Date": "2026-05-05",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎣 Fishing tip: Channel catfish are active now! Try fishing near creek mouths and flats in the evening. Use cut bait or stink bait for best results.",
+            "Hashtags": "#FishingTips #ChannelCatfish #CatfishFishing #FallRiverFishing",
+            "Media Suggestion": "Catfish, fishing rig, sunset fishing",
+            "Category": "Fishing",
+            "Call to Action": "Share your catfish catches!"
+        },
+        {
+            "Date": "2026-05-10",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Nothing beats spring mornings at Fall River 🌅☕ This is the life! Who's joining us?",
+            "Hashtags": "#SpringMornings #CabinLife #LakeViews #FallRiverLake #MorningCoffee",
+            "Media Suggestion": "Coffee on porch, sunrise over lake, peaceful morning",
+            "Category": "Lifestyle",
+            "Call to Action": "Tag someone who needs this!"
+        },
+        {
+            "Date": "2026-05-15",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦃 Mid-May turkey update: Birds are still gobbling! If you haven't filled your tag yet, there's still time. Season runs through May 31.",
+            "Hashtags": "#TurkeyUpdate #SpringTurkey #MayHunting #KansasTurkey #StillTime",
+            "Media Suggestion": "Turkey in field, hunting scene",
+            "Category": "Hunting",
+            "Call to Action": "Weekend cabins available!"
+        },
+        {
+            "Date": "2026-05-20",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Family reunion season! 👨‍👩‍👧‍👦 Our cabins are perfect for family gatherings. Fish, hike, boat, and make memories together at Fall River Lake.",
+            "Hashtags": "#FamilyReunion #FamilyVacation #MultiGenerational #FallRiverLake #FamilyMemories",
+            "Media Suggestion": "Families enjoying activities together",
+            "Category": "Promotional",
+            "Call to Action": "Book multiple cabins for group rates!"
+        },
+        {
+            "Date": "2026-05-25",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🇺🇸 MEMORIAL DAY WEEKEND SPECIAL! Honor those who served with a peaceful retreat. Limited spots still available for the holiday weekend.",
+            "Hashtags": "#MemorialDayWeekend #MDW2026 #HonorAndRemember #KansasGetaway #HolidayWeekend",
+            "Media Suggestion": "American flag, cabin, patriotic theme",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Call for last-minute openings!"
+        },
+        {
+            "Date": "2026-05-28",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🚤 Summer boating season starts this weekend! Water skiing, jet skiing, swimming - Fall River Lake is ready for summer fun!",
+            "Hashtags": "#BoatingSeason #WaterSports #SummerFun #FallRiverLake #MemorialDayWeekend",
+            "Media Suggestion": "Boats on lake, water activities",
+            "Category": "Activities",
+            "Call to Action": "Who's hitting the water?"
+        },
+        {
+            "Date": "2026-05-31",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "Last day of Spring Turkey season! Congratulations to all our successful hunters this year. Already counting down to next season! 🦃",
+            "Hashtags": "#TurkeySeason #SeasonEnd #Congratulations #KansasHunting #UntilNextYear",
+            "Media Suggestion": "Compilation of guest harvest photos (with permission)",
+            "Category": "Hunting",
+            "Call to Action": "Share your season highlights!"
+        }
+    ])
+
+    # JUNE 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-06-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🌞 Hello SUMMER! June means long days, warm nights, and endless lake adventures. Time to make summer memories at Fall River!",
+            "Hashtags": "#FirstDayOfSummer #SummerSolstice #FallRiverSummer #KanasLakeLife #SummerVibes",
+            "Media Suggestion": "Summer lake activities, sunset",
+            "Category": "Seasonal",
+            "Call to Action": "Summer's here - book your escape!"
+        },
+        {
+            "Date": "2026-06-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "POV: Your perfect summer day at Fall River Lake 🌊☀️🎣 Wake, fish, swim, repeat!",
+            "Hashtags": "#SummerDays #LakeLife #FallRiverLake #PerfectDay #SummerVibes",
+            "Media Suggestion": "POV style video of day's activities",
+            "Category": "Lifestyle",
+            "Call to Action": "Double tap for summer!"
+        },
+        {
+            "Date": "2026-06-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🐟 Summer fishing tip: Early morning and evening are best for beating the heat. Target bass around structure and use topwater lures at dawn!",
+            "Hashtags": "#SummerFishing #FishingTips #BassFishing #FallRiverFishing #TopwaterAction",
+            "Media Suggestion": "Early morning fishing, topwater strikes",
+            "Category": "Fishing",
+            "Call to Action": "What's your favorite summer lure?"
+        },
+        {
+            "Date": "2026-06-15",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Father's Day is Sunday! 👔 Give Dad the gift he actually wants - a fishing trip to Fall River Lake. Last minute bookings available!",
+            "Hashtags": "#FathersDay #GiftForDad #FishingTrip #DadDeservesIt #FallRiverLake",
+            "Media Suggestion": "Father and child fishing, happy dad",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Book Dad's perfect weekend - call now!"
+        },
+        {
+            "Date": "2026-06-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "☀️ Beat the heat! Our air-conditioned cabins are your cool oasis after a day on the water. Lake breezes + AC = summer perfection.",
+            "Hashtags": "#BeatTheHeat #SummerComfort #AirConditioned #CabinComfort #FallRiver",
+            "Media Suggestion": "Cool cabin interior, happy guests relaxing",
+            "Category": "Promotional",
+            "Call to Action": "Book your cool summer retreat!"
+        },
+        {
+            "Date": "2026-06-25",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Sunset chaser? 🌅 Fall River sunsets are legendary. Every night is a masterpiece. Come see for yourself!",
+            "Hashtags": "#SunsetLovers #FallRiverSunsets #KansasSunsets #GoldenHour #NatureBeauty",
+            "Media Suggestion": "Stunning sunset over lake",
+            "Category": "Scenic",
+            "Call to Action": "Share your sunset photos - tag us!"
+        },
+        {
+            "Date": "2026-06-29",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🎆 4TH OF JULY WEEK! Celebrate Independence Day at the lake. Fishing by day, fireworks over water at night. Book now!",
+            "Hashtags": "#4thOfJuly #IndependenceDay #LakeCelebration #SummerHoliday #FallRiverLake",
+            "Media Suggestion": "Patriotic theme, lake, fireworks",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "July 4th weekend - call for availability!"
+        }
+    ])
+
+    # JULY 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-07-04",
+            "Platform": "Instagram, Facebook",
+            "Content Type": "Post",
+            "Caption": "🇺🇸 Happy 4th of July! Celebrating freedom, family, and fishing at Fall River Lake. God Bless America! 🎆",
+            "Hashtags": "#IndependenceDay #July4th #ProudToBeAmerican #FallRiverLake #USA",
+            "Media Suggestion": "American flags, lake, patriotic celebration",
+            "Category": "Seasonal",
+            "Call to Action": "How are you celebrating today?"
+        },
+        {
+            "Date": "2026-07-08",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🌊 Water sports paradise! Fall River Lake offers 2,450 acres for jet skiing, water skiing, wakeboarding, and tubing. Bring your toys!",
+            "Hashtags": "#WaterSports #JetSki #WaterSkiing #FallRiverLake #SummerFun",
+            "Media Suggestion": "Action shots of water sports",
+            "Category": "Activities",
+            "Call to Action": "What's your favorite water sport?"
+        },
+        {
+            "Date": "2026-07-12",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Hot summer days = LAKE DAYS! 🏊‍♂️☀️ This is how we cool off at Fall River. Jump in!",
+            "Hashtags": "#LakeDays #Swimming #SummerCooling #FallRiverLake #SummerVibes",
+            "Media Suggestion": "Kids/adults jumping in lake, swimming fun",
+            "Category": "Activities",
+            "Call to Action": "Tag your swim squad!"
+        },
+        {
+            "Date": "2026-07-16",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎣 Catfish are biting at night! Summer catfishing on Fall River Lake is excellent. Try fishing after dark for monster flatheads and channels.",
+            "Hashtags": "#NightFishing #Catfishing #FlatheadCatfish #FallRiverFishing #SummerFishing",
+            "Media Suggestion": "Night fishing setup, big catfish",
+            "Category": "Fishing",
+            "Call to Action": "Who's brave enough for night fishing?"
+        },
+        {
+            "Date": "2026-07-20",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Dog-friendly cabins! 🐕 Your furry family members are welcome at Fall River. Trails, lake access, and open spaces for your pup to explore!",
+            "Hashtags": "#DogFriendly #PetsWelcome #DogVacation #FallRiverLake #TravelWithDogs",
+            "Media Suggestion": "Happy dogs at lake, on trails",
+            "Category": "Promotional",
+            "Call to Action": "Pet fee applies - worth it for happy pups!"
+        },
+        {
+            "Date": "2026-07-24",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🌙 SAVE THE DATE: Fall River Star Party is coming! Each year, the Kansas Astronomical Observers host an amazing stargazing event at Casner Creek. Date TBA - watch for updates!",
+            "Hashtags": "#StarParty #Astronomy #FallRiverStarParty #Stargazing #CasnerCreek",
+            "Media Suggestion": "Stars, telescope, night sky",
+            "Category": "Event Teaser",
+            "Call to Action": "Follow us for star party announcement!"
+        },
+        {
+            "Date": "2026-07-28",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "August bookings are filling FAST! ⚡ Don't miss out on late summer fun. Book your August getaway before it's too late!",
+            "Hashtags": "#BookNow #AugustGetaway #SummerEscape #FallRiverLake #LastMinute",
+            "Media Suggestion": "Calendar, cabin, urgency theme",
+            "Category": "Promotional",
+            "Call to Action": "DM us or call to reserve!"
+        }
+    ])
+
+    # AUGUST 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-08-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🌞 August means: hot days, cool lake water, and some of the best catfish action of the year! Who's ready?",
+            "Hashtags": "#AugustFishing #SummerLakeLife #FallRiverLake #Catfishing #KansasSummer",
+            "Media Suggestion": "Lake activities, happy fisherman with catfish",
+            "Category": "Seasonal/Fishing",
+            "Call to Action": "August availability - book now!"
+        },
+        {
+            "Date": "2026-08-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Life is better at the lake ✨🌊 Just ask our guests! Swipe for the proof →",
+            "Hashtags": "#LakeLife #FallRiverLake #HappyGuests #VacationMode #KansasLake",
+            "Media Suggestion": "Happy guest moments, fun activities",
+            "Category": "Testimonial/Lifestyle",
+            "Call to Action": "Book your happy place!"
+        },
+        {
+            "Date": "2026-08-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦅 Wildlife alert! Summer is great for wildlife viewing. Deer at dawn, eagles fishing, turkeys in fields. Bring your camera!",
+            "Hashtags": "#WildlifeViewing #FallRiverWildlife #NaturePhotography #KansasWildlife #Birdwatching",
+            "Media Suggestion": "Wildlife photos from property",
+            "Category": "Wildlife",
+            "Call to Action": "Share your wildlife photos!"
+        },
+        {
+            "Date": "2026-08-15",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Last month of summer! 😭 Don't let it slip away. Make the most of August - book your last summer hurrah at Fall River!",
+            "Hashtags": "#LastDaysOfSummer #AugustVibes #SummerEnding #FallRiverLake #MakeMemories",
+            "Media Suggestion": "Late summer activities, golden light",
+            "Category": "Promotional",
+            "Call to Action": "Labor Day weekend spots still open!"
+        },
+        {
+            "Date": "2026-08-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎒 Back to school already? Not yet! Squeeze in one more family adventure before the school year starts. We have weeknight specials!",
+            "Hashtags": "#BackToSchool #LastSummerTrip #FamilyTime #FallRiverLake #WeekdayGetaway",
+            "Media Suggestion": "Family enjoying lake together",
+            "Category": "Promotional",
+            "Call to Action": "Weeknight discount - call for details!"
+        },
+        {
+            "Date": "2026-08-25",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🎣 Late summer bass fishing is heating up! Bass are feeding heavily before fall. Throw crankbaits and spinnerbaits around points and ledges.",
+            "Hashtags": "#BassFishing #LateSummer #FallRiverFishing #FishingTips #LargemouthBass",
+            "Media Suggestion": "Nice bass, fishing lures, action shots",
+            "Category": "Fishing",
+            "Call to Action": "Show us your late summer bass!"
+        },
+        {
+            "Date": "2026-08-29",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🇺🇸 LABOR DAY WEEKEND! The perfect end to summer. Grill out, fish, relax. Limited spots left - book TODAY!",
+            "Hashtags": "#LaborDayWeekend #LDW2026 #EndOfSummer #FallRiverLake #HolidayWeekend",
+            "Media Suggestion": "Labor Day celebration, lake fun",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "CALL NOW for last spots!"
+        }
+    ])
+
+    # SEPTEMBER 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-09-01",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Happy September! 🍂 Fall colors are coming, fishing is prime, and HUNTING SEASON STARTS SOON! Who's excited?",
+            "Hashtags": "#September #FallIsComingcoming #HuntingSeason #FallRiverLake #AutumnAwaits",
+            "Media Suggestion": "Early fall scenery, hunting prep",
+            "Category": "Seasonal",
+            "Call to Action": "Book your fall hunting trip!"
+        },
+        {
+            "Date": "2026-09-06",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🦌 YOUTH & DISABILITY DEER SEASON OPENS TODAY! (Sept 6-14) Good luck to all our young hunters and their families!",
+            "Hashtags": "#YouthSeason #DeerHunting #KansasYouthHunt #HuntingHeritage #FallRiverHunting",
+            "Media Suggestion": "Youth hunter, family hunting tradition",
+            "Category": "Hunting",
+            "Call to Action": "Share your youth hunt success stories!"
+        },
+        {
+            "Date": "2026-09-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎣 September = PRIME FISHING! Cooler temps mean active fish. Crappie, bass, catfish - they're all biting now. Best fishing of the year!",
+            "Hashtags": "#SeptemberFishing #FallFishing #PrimeFishing #FallRiverFishing #BestTimeToFish",
+            "Media Suggestion": "Multiple species catches, happy anglers",
+            "Category": "Fishing",
+            "Call to Action": "Book your fall fishing trip!"
+        },
+        {
+            "Date": "2026-09-13",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🦆 Early Teal Season opens TODAY! (Sept 13-28, west of US-283) Blue-wing teal are migrating through Kansas. Get out there!",
+            "Hashtags": "#TealSeason #WaterfowlHunting #DuckHunting #EarlyTeal #KansasWaterfowl",
+            "Media Suggestion": "Teal in flight, waterfowl hunting",
+            "Category": "Hunting",
+            "Call to Action": "Weekend waterfowl hunts available!"
+        },
+        {
+            "Date": "2026-09-15",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🏹 ARCHERY & MUZZLELOADER DEER SEASON OPENS TODAY! Statewide hunting through Sept 28 for muzzleloader, Dec 31 for archery. LET'S GO!",
+            "Hashtags": "#ArcherySeason #DeerHunting #BowHunting #Muzzleloader #KansasDeer",
+            "Media Suggestion": "Bow hunter at dawn, muzzleloader",
+            "Category": "Hunting",
+            "Call to Action": "Book your deer hunting cabin NOW!"
+        },
+        {
+            "Date": "2026-09-20",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "From summer to fall at Fall River 🍃🍂 Watch the transformation! Nature's best show is here.",
+            "Hashtags": "#FallColors #SeasonChange #FallRiverLake #AutumnVibes #KansasFall",
+            "Media Suggestion": "Time-lapse or transition summer to fall",
+            "Category": "Seasonal",
+            "Call to Action": "Experience fall colors - book now!"
+        },
+        {
+            "Date": "2026-09-25",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦃 FALL TURKEY SEASON starts October 1! Mark your calendars. Season runs through January 31, 2026. Book your fall turkey hunt!",
+            "Hashtags": "#FallTurkey #TurkeyHunting #KansasTurkey #HuntingSeason #FallRiverHunting",
+            "Media Suggestion": "Fall turkey, hunting setup",
+            "Category": "Hunting",
+            "Call to Action": "Reserve your turkey hunting dates!"
+        },
+        {
+            "Date": "2026-09-28",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Perfect weather alert! 🌤️ Mid-70s days, crisp nights, gorgeous scenery. September/October = peak Kansas weather. Don't miss it!",
+            "Hashtags": "#PerfectWeather #FallWeather #KansasAutumn #FallRiverLake #BestTimeToVisit",
+            "Media Suggestion": "Beautiful fall day at lake",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Experience perfect fall weather!"
+        }
+    ])
+
+    # OCTOBER 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-10-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🦃 FALL TURKEY SEASON IS OPEN! (Oct 1 - Jan 31) Time to chase those fall birds. Our cabins are hunter-ready!",
+            "Hashtags": "#FallTurkey #OpeningDay #TurkeyHunting #KansasHunting #FallRiverHunting",
+            "Media Suggestion": "Turkey in fall colors, hunting cabin",
+            "Category": "Hunting",
+            "Call to Action": "Book your turkey hunt - availability check!"
+        },
+        {
+            "Date": "2026-10-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Fall colors are POPPING at Fall River! 🍁🧡 This is Kansas at its most beautiful. Come see!",
+            "Hashtags": "#FallColors #AutumnLeaves #FallRiverLake #KansasFall #LeafPeeping",
+            "Media Suggestion": "Vibrant fall foliage, colorful trees",
+            "Category": "Scenic",
+            "Call to Action": "Peak colors are NOW - book this weekend!"
+        },
+        {
+            "Date": "2026-10-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦌 WHITETAIL PRE-RUT SPECIAL SEASON this weekend! Oct 11-13, statewide antlerless-only. Time to fill the freezer!",
+            "Hashtags": "#PreRut #DeerHunting #WhitetailHunting #KansasDeer #AntlerlessHunt",
+            "Media Suggestion": "Doe in field, venison prep",
+            "Category": "Hunting",
+            "Call to Action": "Last-minute weekend bookings available!"
+        },
+        {
+            "Date": "2026-10-15",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🍂 Sweater weather + lake views = fall perfection. Cozy up in our cabins with a hot drink and enjoy the show!",
+            "Hashtags": "#SweaterWeather #FallVibes #CozyСabin #FallRiverLake #AutumnRetreat",
+            "Media Suggestion": "Cozy cabin scene, coffee, fall colors outside",
+            "Category": "Lifestyle/Promotional",
+            "Call to Action": "Book your cozy fall escape!"
+        },
+        {
+            "Date": "2026-10-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎣 October fishing is INCREDIBLE! Crappie are schooling, bass are feeding up, and the weather is perfect. Best fishing month!",
+            "Hashtags": "#OctoberFishing #FallFishing #CrappieFishing #FallRiverFishing #BestFishing",
+            "Media Suggestion": "Fall fishing success, nice catches",
+            "Category": "Fishing",
+            "Call to Action": "Weekend fishing trips available!"
+        },
+        {
+            "Date": "2026-10-24",
+            "Platform": "Instagram, Facebook",
+            "Content Type": "Post",
+            "Caption": "🌟 FALL RIVER STAR PARTY UPDATE: Stay tuned for 2026 dates! This annual event at Casner Creek is magical - dark skies, telescopes, celestial wonders. We'll announce as soon as dates are confirmed!",
+            "Hashtags": "#FallRiverStarParty #Stargazing #CasnerCreek #Astronomy #DarkSkies",
+            "Media Suggestion": "Star trails, night sky, telescope",
+            "Category": "Event",
+            "Call to Action": "Want updates? Follow us!"
+        },
+        {
+            "Date": "2026-10-28",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🎃 Happy Halloween weekend! No tricks, just treats at Fall River. Come for a spooky-fun fall getaway! 👻",
+            "Hashtags": "#Halloween #HalloweenWeekend #FallGetaway #FallRiverLake #SpookySeason",
+            "Media Suggestion": "Fun Halloween decorations, fall themed",
+            "Category": "Seasonal",
+            "Call to Action": "Halloween weekend spots available!"
+        },
+        {
+            "Date": "2026-10-31",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦌 NOVEMBER MEANS RUT! Peak whitetail activity is coming. Our cabins book fast during rut season - reserve your dates NOW!",
+            "Hashtags": "#TheRut #WhitetailRut #DeerHunting #NovemberHunting #KansasDeer",
+            "Media Suggestion": "Buck in rut, scrapes, rut sign",
+            "Category": "Hunting",
+            "Call to Action": "November filling up - call today!"
+        }
+    ])
+
+    # NOVEMBER 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-11-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🦆 GOOSE SEASON OPENS TODAY! (Nov 1 - Jan 4, then Jan 24 - Feb 15) Canada geese are flying. Get your decoys ready!",
+            "Hashtags": "#GooseSeason #WaterfowlHunting #CanadaGeese #KansasWaterfowl #FallRiverHunting",
+            "Media Suggestion": "Geese in flight, decoy spread",
+            "Category": "Hunting",
+            "Call to Action": "Waterfowl hunting packages available!"
+        },
+        {
+            "Date": "2026-11-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "RUT IS ON! 🦌 Bucks are moving, does are everywhere. This is what we live for! #DeerSeason",
+            "Hashtags": "#TheRut #BuckFever #WhitetailHunting #DeerHunting #RutAction",
+            "Media Suggestion": "Trail cam footage, buck activity",
+            "Category": "Hunting",
+            "Call to Action": "Tag a hunting buddy who needs to see this!"
+        },
+        {
+            "Date": "2026-11-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🍁 Mid-November = peak rut activity! If you're hunting Kansas whitetails, THIS is your week. We have limited mid-week availability!",
+            "Hashtags": "#PeakRut #WhitetailWeek #DeerHunting #KansasDeer #RutHunting",
+            "Media Suggestion": "Big buck, hunting action",
+            "Category": "Hunting",
+            "Call to Action": "Mid-week hunts available - book now!"
+        },
+        {
+            "Date": "2026-11-15",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🎣 November fishing: underrated! While everyone's hunting, smart anglers are catching monster crappie and walleye. Quiet lake, big fish!",
+            "Hashtags": "#NovemberFishing #FallFishing #Crappie #Walleye #FallRiverFishing",
+            "Media Suggestion": "Big crappie/walleye, fall fishing",
+            "Category": "Fishing",
+            "Call to Action": "Book a fishing getaway!"
+        },
+        {
+            "Date": "2026-11-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🍗 THANKSGIVING WEEK! Celebrate with family at Fall River. Turkey on the table, turkeys in the field! Limited spots for the holiday.)",
+            "Hashtags": "#Thanksgiving #ThanksgivingWeek #FamilyHoliday #FallRiverLake #HolidayGetaway",
+            "Media Suggestion": "Thanksgiving theme, family gathering",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Thanksgiving cabins - check availability!"
+        },
+        {
+            "Date": "2026-11-26",
+            "Platform": "Instagram, Facebook",
+            "Content Type": "Post",
+            "Caption": "🙏 Happy Thanksgiving from our family to yours! We're grateful for amazing guests, beautiful Kansas, and this incredible place we call home.",
+            "Hashtags": "#HappyThanksgiving #Grateful #Thanksgiving2026 #FallRiverFamily #Blessed",
+            "Media Suggestion": "Thanksgiving message, beautiful fall scenery",
+            "Category": "Seasonal",
+            "Call to Action": "What are you thankful for?"
+        },
+        {
+            "Date": "2026-11-29",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🛍️ BLACK FRIDAY SPECIAL! Book any 2026 stay this weekend and get 15% off! Use code BLACKFRIDAY26. Limited time!",
+            "Hashtags": "#BlackFriday #BlackFridayDeal #BookNow #FallRiverLake #TravelDeals",
+            "Media Suggestion": "Black Friday sale graphic",
+            "Category": "Promotional",
+            "Call to Action": "Book now - offer ends Monday!"
+        },
+        {
+            "Date": "2026-11-30",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "December bookings are OPEN! 🎄 Holiday gatherings, winter hunting, New Year's getaways. Book your winter stays now!",
+            "Hashtags": "#DecemberBookings #HolidaySeason #WinterGetaway #FallRiverLake #BookAhead",
+            "Media Suggestion": "Winter cabin scene, holiday theme",
+            "Category": "Promotional",
+            "Call to Action": "Reserve your holiday dates!"
+        }
+    ])
+
+    # DECEMBER 2026 Content
+    calendar.extend([
+        {
+            "Date": "2026-12-01",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "❄️ December is here! Winter hunting, cozy cabins, and holiday magic at Fall River Lake. Who's ready for winter adventures?",
+            "Hashtags": "#DecemberAdventures #WinterAtTheLake #FallRiverLake #HolidaySeason #WinterHunting",
+            "Media Suggestion": "Winter lake scene, cabin with lights",
+            "Category": "Seasonal",
+            "Call to Action": "Book your December escape!"
+        },
+        {
+            "Date": "2026-12-05",
+            "Platform": "Instagram",
+            "Content Type": "Reel",
+            "Caption": "Cozy cabin checklist: ✅ Fireplace ✅ Hot cocoa ✅ Lake view ✅ Perfect winter retreat. This is it!",
+            "Hashtags": "#CozyCabin #WinterRetreat #CabinLife #FallRiverLake #WinterVibes",
+            "Media Suggestion": "Cozy interior scenes, fire, comfort",
+            "Category": "Lifestyle/Promotional",
+            "Call to Action": "Tag someone who needs this!"
+        },
+        {
+            "Date": "2026-12-10",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦌 Post-rut deer hunting is excellent right now! Bucks are exhausted and feeding heavily. Late archery season through Dec 31!",
+            "Hashtags": "#PostRut #LateSeason #DeerHunting #ArcherySeason #KansasDeer",
+            "Media Suggestion": "Winter deer hunting, buck feeding",
+            "Category": "Hunting",
+            "Call to Action": "December hunts available!"
+        },
+        {
+            "Date": "2026-12-15",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "🎁 GIFT IDEA: Give the gift of adventure! Gift certificates available for Fall River Lake cabin stays. Perfect for the outdoors lover!",
+            "Hashtags": "#GiftIdea #HolidayGifts #GiftCertificate #PerfectGift #FallRiverLake",
+            "Media Suggestion": "Gift certificate graphic, holiday theme",
+            "Category": "Promotional",
+            "Call to Action": "DM us for gift certificates!"
+        },
+        {
+            "Date": "2026-12-20",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🦆 Waterfowl hunting is heating up! Ducks and geese are everywhere. Late-season action is some of the best!",
+            "Hashtags": "#WaterfowlHunting #LateSeasonDucks #GooseHunting #FallRiverHunting #WinterWaterfowl",
+            "Media Suggestion": "Duck/goose hunting, winter scene",
+            "Category": "Hunting",
+            "Call to Action": "Book your waterfowl hunt!"
+        },
+        {
+            "Date": "2026-12-23",
+            "Platform": "Instagram, Facebook",
+            "Content Type": "Post",
+            "Caption": "🎄 Merry Christmas from Fall River Lake! Wishing you and yours peace, joy, and outdoor adventures in the new year!",
+            "Hashtags": "#MerryChristmas #Christmas2026 #HolidayGreetings #FallRiverFamily #PeaceOnEarth",
+            "Media Suggestion": "Christmas decorations, festive cabin",
+            "Category": "Seasonal",
+            "Call to Action": "Merry Christmas to all!"
+        },
+        {
+            "Date": "2026-12-27",
+            "Platform": "Facebook",
+            "Content Type": "Post",
+            "Caption": "🎆 NEW YEAR'S WEEK! Ring in 2027 at Fall River Lake. Last-minute openings for New Year's week. Book now!",
+            "Hashtags": "#NewYearsEve #NYE2026 #NewYearsWeek #FallRiverLake #RingInTheNewYear",
+            "Media Suggestion": "New Year celebration theme",
+            "Category": "Seasonal/Promotional",
+            "Call to Action": "Limited NYE availability - call now!"
+        },
+        {
+            "Date": "2026-12-29",
+            "Platform": "Instagram",
+            "Content Type": "Post",
+            "Caption": "Reflecting on 2026... Thank you to every guest who made this year special! Here's to more adventures in 2027! 🎉",
+            "Hashtags": "#YearInReview #ThankYou #2026Memories #FallRiverFamily #GratefulHeart",
+            "Media Suggestion": "Year highlight photos, guest moments",
+            "Category": "Testimonial/Seasonal",
+            "Call to Action": "What was your favorite 2026 memory?"
+        },
+        {
+            "Date": "2026-12-31",
+            "Platform": "Facebook, Instagram",
+            "Content Type": "Post",
+            "Caption": "🍾 HAPPY NEW YEAR'S EVE! Last day of archery deer season too. Make it count! Cheers to 2027 from Fall River Lake!",
+            "Hashtags": "#NewYearsEve #NYE2026 #LastDayOfSeason #DeerHunting #HappyNewYear",
+            "Media Suggestion": "NYE celebration, hunting cabin",
+            "Category": "Seasonal",
+            "Call to Action": "See you in 2027!"
+        }
+    ])
+
+    return calendar
+
+def upload_to_airtable(records: List[Dict]) -> bool:
+    """Upload content calendar to Airtable"""
+
+    if not AIRTABLE_API_KEY or not AIRTABLE_BASE_ID:
+        print("ERROR: Missing Airtable configuration!")
+        print("Please set environment variables:")
+        print("  export AIRTABLE_API_KEY='your_key_here'")
+        print("  export AIRTABLE_BASE_ID='your_base_id_here'")
+        print("\nGenerating JSON file instead...")
+
+        # Save to JSON as backup
+        with open('fall_river_content_calendar_2026.json', 'w') as f:
+            json.dump(records, f, indent=2)
+        print(f"✓ Saved {len(records)} posts to fall_river_content_calendar_2026.json")
+        return False
+
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    # Airtable allows max 10 records per request
+    batch_size = 10
+    total_uploaded = 0
+
+    for i in range(0, len(records), batch_size):
+        batch = records[i:i + batch_size]
+
+        # Format for Airtable
+        airtable_records = [{"fields": record} for record in batch]
+
+        try:
+            response = requests.post(
+                url,
+                headers=headers,
+                json={"records": airtable_records}
+            )
+
+            if response.status_code == 200:
+                total_uploaded += len(batch)
+                print(f"✓ Uploaded batch {i//batch_size + 1} ({total_uploaded}/{len(records)} posts)")
+            else:
+                print(f"✗ Error uploading batch: {response.status_code}")
+                print(response.text)
+                return False
+
+        except Exception as e:
+            print(f"✗ Upload error: {str(e)}")
+            return False
+
+    print(f"\n✓ Successfully uploaded {total_uploaded} posts to Airtable!")
+    return True
+
+def main():
+    """Main execution"""
+    print("=" * 60)
+    print("Fall River Lake Rentals - Social Media Calendar Generator")
+    print("2026 Content Calendar")
+    print("=" * 60)
+    print()
+
+    # Generate calendar
+    print("Generating content calendar...")
+    calendar = create_content_calendar()
+    print(f"✓ Generated {len(calendar)} social media posts for 2026")
+    print()
+
+    # Display sample
+    print("Sample posts:")
+    print("-" * 60)
+    for post in calendar[:3]:
+        print(f"\nDate: {post['Date']}")
+        print(f"Platform: {post['Platform']}")
+        print(f"Category: {post['Category']}")
+        print(f"Caption: {post['Caption'][:100]}...")
+    print("\n" + "-" * 60)
+    print()
+
+    # Upload to Airtable
+    print("Uploading to Airtable...")
+    success = upload_to_airtable(calendar)
+
+    if success:
+        print("\n✓ All content successfully uploaded to Airtable!")
+    else:
+        print("\n⚠ Airtable upload failed, but JSON file created as backup.")
+        print("Instructions:")
+        print("1. Set up your Airtable base")
+        print("2. Create a table named 'Social Media Content Calendar 2026'")
+        print("3. Add fields matching the record structure")
+        print("4. Set environment variables and run again, OR")
+        print("5. Import the JSON file manually")
+
+    print("\n" + "=" * 60)
+    print("Done!")
+    print("=" * 60)
+
+if __name__ == "__main__":
+    main()
